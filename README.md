@@ -1,93 +1,77 @@
-# gensyn-node
+# aztech-node
 first step after opening vps 
 
 ```bash
-sudo apt update
+sudo apt-get update && sudo apt-get upgrade -y
 ```
 ```bash
-sudo apt install -y
+sudo apt install curl iptables build-essential git wget lz4 jq make gcc nano automake autoconf tmux htop nvme-cli libgbm1 pkg-config libssl-dev libleveldb-dev tar clang bsdmainutils ncdu unzip libleveldb-dev  -y
 ```
 ```bash
-sudo apt update && sudo apt install -y python3 python3-venv python3-pip curl wget screen git lsof nano unzip iproute2
+sudo apt update -y && sudo apt upgrade -y
+for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt update -y && sudo apt upgrade -y
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Test Docker
+sudo docker run hello-world
+
+sudo systemctl enable docker
+sudo systemctl restart docker
 ```
 ```bash
-curl -sSL https://raw.githubusercontent.com/zunxbt/installation/main/node.sh | bash
+sudo usermod -aG docker $USER
 ```
 
 ```bash
-screen -S gensyn
+bash -i <(curl -s https://install.aztec.network)
 ```
-5. **Run the swarm**
+5. **update**
 ```bash
-cd $HOME && rm -rf gensyn-testnet && git clone https://github.com/zunxbt/gensyn-testnet.git && chmod +x gensyn-testnet/gensyn.sh && ./gensyn-testnet/gensyn.sh
+aztec-up 0.85.0-alpha-testnet.9
 -
 
 ```
 ```
-if any login problem out this commands
- 
-```bash
-cd rl-swarm
+sudo ufw allow 22
+sudo ufw allow ssh
+sudo ufw allow 40400
+sudo ufw allow 8080
+sudo ufw enable
 ```
 ```bash
-nano modal-login/app/page.tsx
+sudo ufw status verbose
 ```
 ```bash
-useEffect(() => {
-  if (!user && !signerStatus.isInitializing) {
-    openAuthModal(); 
-  }
-}, [user, signerStatus.isInitializing]);
-
-login problem will be solved 
-
-now **Run the swarm**
+screen -S Aztec
 ```
 ```bash
-./run_rl_swarm.sh
+aztec-up 0.85.0-alpha-testnet.9
 ```
-after login now use the trick 
-crtl + c
+now edit this file with your credential
 ```bash
-cd $HOME/rl-swarm/hivemind_exp/configs/mac/
+aztec start --node --archiver --sequencer \
+  --network alpha-testnet \
+  --l1-rpc-urls rpc-url \
+  --l1-consensus-host-urls rpc-url \
+  --sequencer.validatorPrivateKey 0xYourPrivateKey \
+  --sequencer.coinbase 0xYourAddress \
+  --p2p.p2pIp ip
 ```
 ```bash
-ls
-```
-run ‘nano <filename>’ 
-(A) torch_dtype = float32
-(B) bf16 : false
-(C) tf32 : false
-(D) gradient_checkpointing: false
-(E)per_device_train_batch_size: 1
-```bash
-RL_SWARM_UNSLOTH=False ./run_rl_swarm.sh
-```
 
- ## 🔄️ Back up `swarm.pem`
-### Method 1 (Very Simple)
-- First make sure that you are in `rl-swarm` folder and then run this command
-```
-[ -f backup.sh ] && rm backup.sh; curl -sSL -O https://raw.githubusercontent.com/zunxbt/gensyn-testnet/main/backup.sh && chmod +x backup.sh && ./backup.sh
-```
-- It will show something like this in your terminal
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-```bash
-./run_rl_swarm.sh
-
-after login and running now use the trick 
 
 
